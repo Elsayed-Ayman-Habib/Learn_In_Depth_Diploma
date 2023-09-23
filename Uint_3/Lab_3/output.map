@@ -1,0 +1,109 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+flash            0x00000000         0x20000000         xr
+sram             0x20000000         0x20000000         xrw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+
+.text           0x00000000      0x12c
+ *(.vectors*)
+ .vectors       0x00000000       0x10 startup.o
+                0x00000000                g_p_fun_Vectors
+ *(.text*)
+ .text          0x00000010       0x90 startup.o
+                0x00000010                NMI_Handler
+                0x00000010                Default_Handler
+                0x00000010                HardFault_Handler
+                0x0000001c                Reset_Handler
+ .text          0x000000a0       0x8c app.o
+                0x000000a0                main
+ *(.rodata*)
+                0x0000012c                _E_text = .
+
+.glue_7         0x0000012c        0x0
+ .glue_7        0x0000012c        0x0 linker stubs
+
+.glue_7t        0x0000012c        0x0
+ .glue_7t       0x0000012c        0x0 linker stubs
+
+.vfp11_veneer   0x0000012c        0x0
+ .vfp11_veneer  0x0000012c        0x0 linker stubs
+
+.v4_bx          0x0000012c        0x0
+ .v4_bx         0x0000012c        0x0 linker stubs
+
+.iplt           0x0000012c        0x0
+ .iplt          0x0000012c        0x0 startup.o
+
+.rel.dyn        0x0000012c        0x0
+ .rel.iplt      0x0000012c        0x0 startup.o
+
+.data           0x20000000        0x0 load address 0x0000012c
+                0x20000000                _S_DATA = .
+ *(.data*)
+ .data          0x20000000        0x0 startup.o
+ .data          0x20000000        0x0 app.o
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                _E_DATA = .
+
+.igot.plt       0x20000000        0x0 load address 0x0000012c
+ .igot.plt      0x20000000        0x0 startup.o
+
+.bss            0x20000000      0x400 load address 0x0000012c
+                0x20000000                _S_BSS = .
+ *(.bss*)
+ .bss           0x20000000      0x400 startup.o
+ .bss           0x20000400        0x0 app.o
+                0x20000400                . = ALIGN (0x4)
+                0x20000400                _E_BSS = .
+LOAD startup.o
+LOAD app.o
+OUTPUT(learn-in-depth-tiva.elf elf32-littlearm)
+
+.debug_info     0x00000000      0x222
+ .debug_info    0x00000000      0x1bc startup.o
+ .debug_info    0x000001bc       0x66 app.o
+
+.debug_abbrev   0x00000000      0x147
+ .debug_abbrev  0x00000000       0xeb startup.o
+ .debug_abbrev  0x000000eb       0x5c app.o
+
+.debug_loc      0x00000000       0xb4
+ .debug_loc     0x00000000       0x7c startup.o
+ .debug_loc     0x0000007c       0x38 app.o
+
+.debug_aranges  0x00000000       0x40
+ .debug_aranges
+                0x00000000       0x20 startup.o
+ .debug_aranges
+                0x00000020       0x20 app.o
+
+.debug_line     0x00000000      0x1a0
+ .debug_line    0x00000000      0x13e startup.o
+ .debug_line    0x0000013e       0x62 app.o
+
+.debug_str      0x00000000      0x19e
+ .debug_str     0x00000000      0x187 startup.o
+                                0x1c4 (size before relaxing)
+ .debug_str     0x00000187       0x17 app.o
+                                 0xce (size before relaxing)
+
+.comment        0x00000000       0x7e
+ .comment       0x00000000       0x7e startup.o
+                                 0x7f (size before relaxing)
+ .comment       0x0000007e       0x7f app.o
+
+.ARM.attributes
+                0x00000000       0x33
+ .ARM.attributes
+                0x00000000       0x33 startup.o
+ .ARM.attributes
+                0x00000033       0x33 app.o
+
+.debug_frame    0x00000000       0x7c
+ .debug_frame   0x00000000       0x50 startup.o
+ .debug_frame   0x00000050       0x2c app.o
